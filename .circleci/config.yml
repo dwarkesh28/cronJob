@@ -6,10 +6,10 @@ workflows:
   production:
     jobs:
       - test:
-          filters:
-            branches:
-              only:
-                - main
+        filters:
+          branches:
+            only:
+              - main
       - docker/publish:
           image: $DOCKER_USERNAME/$DOCKER_REPONAME
           requires:
@@ -18,7 +18,6 @@ workflows:
             branches:
               only:
                 - main
-
 jobs:
   test:
     working_directory: ~/repo
@@ -30,19 +29,19 @@ jobs:
           keys:
             - go-mod-v4-{{ checksum "go.sum" }}
       - run:
-          name: Install Dependencies
-          command: go get ./...
+        name: Install Dependencies
+        command: go get ./...
       - save_cache:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
             - "/go/pkg/mod"
       - run:
-          name: Create .env file
-          command:
-            - touch .env
-            - echo SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL} >> .env
-            - echo CRON_TIMEZONE=${CRON_TIMEZONE} >> .env
-            - echo CRON_SCEDULE=${CRON_SCEDULE} >> .env
+        name: Create .env file
+        command: |
+          touch .env
+          echo SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL} >> .env
+          echo CRON_TIMEZONE=${CRON_TIMEZONE} >> .env
+          echo CRON_SCEDULE=${CRON_SCEDULE} >> .env
       - run:
-          name: Run test
-          command: go test -p 1 -v ./tests
+        name: Run test
+        command: go test -p 1 -v ./tests
