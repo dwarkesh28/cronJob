@@ -10,11 +10,11 @@ import (
 
 func TestSendSlackMessage(t *testing.T) {
 
-	err := godotenv.Load("../.env")
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	err = utils.SendSlackMessage("Test message")
+	err = utils.SendSlackMessage("Hey there!")
 
 	if err != nil {
 		t.Errorf("error sending slack message : %s", err)
